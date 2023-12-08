@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+  <style rel="stylesheet" >
+      body,
+      html {
+          margin: 0;
+          padding: 0;
+          height: 100%;
+          overflow: hidden;
+      }
+
+      .container {
+          position: relative;
+          height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          overflow: hidden;
+      }
+
+      form {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+      }
+
+      .circles {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+      }
+
+      .circle {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 5px;
+          font-weight: bold;
+          font-size: 1.2em;
+          cursor: pointer;
+          transition: background-color 0.3s ease, transform 0.5s ease;
+      }
+
+      .even {
+          background-color: red;
+      }
+
+      .odd {
+          background-color: blue;
+      }
+
+      .selected {
+          background-color: green !important;
+          transform: scale(1.2);
+      }
+
+      input[type="text"],
+      button {
+          margin-top: 20px;
+          padding: 8px;
+      }
+
+  </style>
+</head>
+<body>
+<div class="container">
+    <form id="circleForm">
+        <div class="circles" id="evenCircles">
+            <!-- دایره‌های زوج را اینجا قرار دهید -->
+        </div>
+        <div class="circles" id="oddCircles">
+            <!-- دایره‌های فرد را اینجا قرار دهید -->
+        </div>
+        <input type="text" id="titleInput" placeholder="عنوان">
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+
+
+</body>
+<script type="text/javascript">
+    const evenCircles = document.getElementById('evenCircles');
+    const oddCircles = document.getElementById('oddCircles');
+    const circleForm = document.getElementById('circleForm');
+    let selectedCircles = [];
+
+    function createCircle(parent, number) {
+        const circle = document.createElement('div');
+        circle.textContent = number;
+        circle.classList.add('circle');
+        circle.classList.add(number % 2 === 0 ? 'even' : 'odd');
+        parent.appendChild(circle);
+
+        circle.addEventListener('click', () => {
+            if (selectedCircles.includes(circle)) {
+                selectedCircles = selectedCircles.filter(item => item !== circle);
+                circle.classList.remove('selected');
+            } else {
+                selectedCircles.push(circle);
+                circle.classList.add('selected');
+            }
+        });
+    }
+
+    for (let i = 1; i <= 20; i++) {
+        if (i % 2 === 0) {
+            createCircle(evenCircles, i);
+        } else {
+            createCircle(oddCircles, i);
+        }
+    }
+
+    circleForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const title = document.getElementById('titleInput').value;
+        const selectedNumbers = selectedCircles.map(circle => circle.textContent);
+        alert(`عنوان: ${title}\nانتخاب شده: ${selectedNumbers.join(', ')}`);
+    });
+
+</script>
+</html>

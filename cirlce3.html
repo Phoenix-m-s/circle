@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .circles {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 5px;
+      font-weight: bold;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.5s ease;
+      animation-duration: 3s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes moveVertical {
+      0% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-150px);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes moveHorizontal {
+      0% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(150px);
+      }
+      100% {
+        transform: translateX(0);
+      }
+    }
+
+    .vertical .circle {
+      animation: moveVertical 3s linear infinite;
+    }
+
+    .horizontal .circle {
+      animation: moveHorizontal 3s linear infinite;
+    }
+
+    .even {
+      background-color: red;
+    }
+
+    .odd {
+      background-color: blue;
+    }
+
+    .selected {
+      background-color: green !important;
+      transform: scale(1.2);
+    }
+
+    input[type="text"],
+    button {
+      margin-top: 20px;
+      padding: 8px;
+    }
+
+  </style>
+</head>
+<body>
+<div class="container">
+  <form id="circleForm">
+    <div class="circles vertical" id="verticalCircles">
+      <!-- دایره‌های عمودی را اینجا قرار دهید -->
+    </div>
+    <div class="circles horizontal" id="horizontalCircles">
+      <!-- دایره‌های افقی را اینجا قرار دهید -->
+    </div>
+    <input type="text" id="titleInput" placeholder="عنوان">
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+
+
+</body>
+<script>
+  const verticalCircles = document.getElementById('verticalCircles');
+  const horizontalCircles = document.getElementById('horizontalCircles');
+  const circleForm = document.getElementById('circleForm');
+  let selectedCircles = [];
+
+  function createCircle(parent, number, isVertical) {
+    const circle = document.createElement('div');
+    circle.textContent = number;
+    circle.classList.add('circle');
+    circle.classList.add(number % 2 === 0 ? 'even' : 'odd');
+    parent.appendChild(circle);
+
+    if (isVertical) {
+      parent.classList.add('vertical');
+    } else {
+      parent.classList.add('horizontal');
+    }
+
+    circle.addEventListener('click', () => {
+      if (selectedCircles.includes(circle)) {
+        selectedCircles = selectedCircles.filter(item => item !== circle);
+        circle.classList.remove('selected');
+      } else {
+        selectedCircles.push(circle);
+        circle.classList.add('selected');
+      }
+    });
+  }
+
+  for (let i = 1; i <= 10; i++) {
+    createCircle(verticalCircles, i, true);
+    createCircle(horizontalCircles, i + 10, false);
+  }
+
+  circleForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const title = document.getElementById('titleInput').value;
+    const selectedNumbers = selectedCircles.map(circle => circle.textContent);
+    alert(`عنوان: ${title}\nانتخاب شده: ${selectedNumbers.join(', ')}`);
+  });
+
+
+</script>
+</html>
